@@ -1,6 +1,16 @@
 """방향키로 소년 캐릭터를 이동하는 pico2d 프로그램."""
 
 WIDTH, HEIGHT = 1280, 1024
+FRAME_WIDTH, FRAME_HEIGHT = 100, 100
+
+
+class Character:
+    def __init__(self):
+        self.x = WIDTH / 2
+        self.y = HEIGHT / 2
+
+    def draw(self, sprite):
+        sprite.clip_draw(0, 300, FRAME_WIDTH, FRAME_HEIGHT, self.x, self.y)
 
 
 def main():
@@ -8,6 +18,8 @@ def main():
 
     p.open_canvas(WIDTH, HEIGHT)
     try:
+        character = Character()
+        sprite = p.load_image("animation_sheet.png")
         ground = p.load_image("TUK_GROUND.png")
         running = True
         while running:
@@ -20,6 +32,7 @@ def main():
                 break
             p.clear_canvas()
             ground.draw(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT)
+            character.draw(sprite)
             p.update_canvas()
             p.delay(0.01)
     finally:
