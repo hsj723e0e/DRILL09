@@ -9,9 +9,11 @@ class Character:
         self.x = WIDTH / 2
         self.y = HEIGHT / 2
         self.direction = None
+        self.pressed = set()
         self.facing = "right"
 
     def press(self, key):
+        self.pressed.add(key)
         if key in ("up", "down"):
             self.direction = key
         elif key in ("right", "left"):
@@ -19,8 +21,14 @@ class Character:
             self.facing = key
 
     def release(self, key):
+        self.pressed.discard(key)
         if self.direction == key:
-            self.direction = None
+            self.direction = next(
+                (direction for direction in ("right", "left", "up", "down")
+                 if direction in self.pressed), None
+            )
+            if self.direction in ("right", "left"):
+                self.facing = self.direction
 
     def update(self):
         if self.direction == "right":
