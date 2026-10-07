@@ -36,13 +36,16 @@ class Character:
 
     def update(self, dt):
         dx, dy = self.movement()
-        self.moving = bool(dx or dy)
         if dx:
             self.facing = "right" if dx > 0 else "left"
+        old_x, old_y = self.x, self.y
         half_width = FRAME_WIDTH / 2
         self.x = max(half_width, min(WIDTH - half_width,
                                      self.x + dx * MOVE_SPEED * dt))
-        self.y += dy * MOVE_SPEED * dt
+        half_height = FRAME_HEIGHT / 2
+        self.y = max(half_height, min(HEIGHT - half_height,
+                                      self.y + dy * MOVE_SPEED * dt))
+        self.moving = self.x != old_x or self.y != old_y
         if self.moving:
             self.animation_time += dt
             self.frame = int(self.animation_time * ANIMATION_FPS) % FRAME_COUNT
