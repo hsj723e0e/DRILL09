@@ -39,7 +39,9 @@ class Character:
         self.moving = bool(dx or dy)
         if dx:
             self.facing = "right" if dx > 0 else "left"
-        self.x += dx * MOVE_SPEED * dt
+        half_width = FRAME_WIDTH / 2
+        self.x = max(half_width, min(WIDTH - half_width,
+                                     self.x + dx * MOVE_SPEED * dt))
         self.y += dy * MOVE_SPEED * dt
         if self.moving:
             self.animation_time += dt
