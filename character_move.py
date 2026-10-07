@@ -8,6 +8,7 @@ def main():
 
     p.open_canvas(WIDTH, HEIGHT)
     try:
+        ground = p.load_image("TUK_GROUND.png")
         running = True
         while running:
             for event in p.get_events():
@@ -18,6 +19,7 @@ def main():
             if not running:
                 break
             p.clear_canvas()
+            ground.draw(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT)
             p.update_canvas()
             p.delay(0.01)
     finally:
