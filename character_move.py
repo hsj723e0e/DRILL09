@@ -8,6 +8,15 @@ class Character:
     def __init__(self):
         self.x = WIDTH / 2
         self.y = HEIGHT / 2
+        self.direction = None
+
+    def press(self, key):
+        if key == "right":
+            self.direction = key
+
+    def update(self):
+        if self.direction == "right":
+            self.x += 5
 
     def draw(self, sprite):
         sprite.clip_draw(0, 300, FRAME_WIDTH, FRAME_HEIGHT, self.x, self.y)
@@ -21,6 +30,7 @@ def main():
         character = Character()
         sprite = p.load_image("animation_sheet.png")
         ground = p.load_image("TUK_GROUND.png")
+        keys = {p.SDLK_RIGHT: "right"}
         running = True
         while running:
             for event in p.get_events():
@@ -28,8 +38,11 @@ def main():
                     running = False
                 elif event.type == p.SDL_KEYDOWN and event.key == p.SDLK_ESCAPE:
                     running = False
+                elif event.type == p.SDL_KEYDOWN and event.key in keys:
+                    character.press(keys[event.key])
             if not running:
                 break
+            character.update()
             p.clear_canvas()
             ground.draw(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT)
             character.draw(sprite)
