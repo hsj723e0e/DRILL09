@@ -9,17 +9,22 @@ class Character:
         self.x = WIDTH / 2
         self.y = HEIGHT / 2
         self.direction = None
+        self.facing = "right"
 
     def press(self, key):
-        if key == "right":
+        if key in ("right", "left"):
             self.direction = key
+            self.facing = key
 
     def update(self):
         if self.direction == "right":
             self.x += 5
+        elif self.direction == "left":
+            self.x -= 5
 
     def draw(self, sprite):
-        sprite.clip_draw(0, 300, FRAME_WIDTH, FRAME_HEIGHT, self.x, self.y)
+        row = 300 if self.facing == "right" else 200
+        sprite.clip_draw(0, row, FRAME_WIDTH, FRAME_HEIGHT, self.x, self.y)
 
 
 def main():
@@ -30,7 +35,7 @@ def main():
         character = Character()
         sprite = p.load_image("animation_sheet.png")
         ground = p.load_image("TUK_GROUND.png")
-        keys = {p.SDLK_RIGHT: "right"}
+        keys = {p.SDLK_RIGHT: "right", p.SDLK_LEFT: "left"}
         running = True
         while running:
             for event in p.get_events():
