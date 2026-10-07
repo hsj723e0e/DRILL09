@@ -18,6 +18,10 @@ class Character:
             self.direction = key
             self.facing = key
 
+    def release(self, key):
+        if self.direction == key:
+            self.direction = None
+
     def update(self):
         if self.direction == "right":
             self.x += 5
@@ -51,6 +55,8 @@ def main():
                     running = False
                 elif event.type == p.SDL_KEYDOWN and event.key in keys:
                     character.press(keys[event.key])
+                elif event.type == p.SDL_KEYUP and event.key in keys:
+                    character.release(keys[event.key])
             if not running:
                 break
             character.update()
