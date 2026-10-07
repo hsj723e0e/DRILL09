@@ -1,7 +1,10 @@
 """방향키로 소년 캐릭터를 이동하는 pico2d 프로그램."""
 
+from time import perf_counter
+
 WIDTH, HEIGHT = 1280, 1024
 FRAME_WIDTH, FRAME_HEIGHT = 100, 100
+MOVE_SPEED = 250.0  # 초당 이동 픽셀 수
 
 
 class Character:
@@ -28,13 +31,13 @@ class Character:
         dy = int("up" in self.pressed) - int("down" in self.pressed)
         return dx, dy
 
-    def update(self):
+    def update(self, dt):
         dx, dy = self.movement()
         self.moving = bool(dx or dy)
         if dx:
             self.facing = "right" if dx > 0 else "left"
-        self.x += dx * 5
-        self.y += dy * 5
+        self.x += dx * MOVE_SPEED * dt
+        self.y += dy * MOVE_SPEED * dt
         self.frame = (self.frame + 1) % 8 if self.moving else 0
 
     def draw(self, sprite):
@@ -54,6 +57,7 @@ def main():
         sprite = p.load_image("animation_sheet.png")
         ground = p.load_image("TUK_GROUND.png")
         keys = {p.SDLK_RIGHT: "right", p.SDLK_LEFT: "left", p.SDLK_UP: "up", p.SDLK_DOWN: "down"}
+        previous_time = perf_counter()
         running = True
         while running:
             for event in p.get_events():
@@ -67,7 +71,10 @@ def main():
                     character.release(keys[event.key])
             if not running:
                 break
-            character.update()
+            now = perf_counter()
+            dt = min(now - previous_time, 0.1)
+            previous_time = now
+            character.update(dt)
             p.clear_canvas()
             ground.draw(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT)
             character.draw(sprite)
