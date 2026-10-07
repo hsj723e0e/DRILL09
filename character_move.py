@@ -12,7 +12,9 @@ class Character:
         self.facing = "right"
 
     def press(self, key):
-        if key in ("right", "left"):
+        if key == "up":
+            self.direction = key
+        elif key in ("right", "left"):
             self.direction = key
             self.facing = key
 
@@ -21,6 +23,8 @@ class Character:
             self.x += 5
         elif self.direction == "left":
             self.x -= 5
+        elif self.direction == "up":
+            self.y += 5
 
     def draw(self, sprite):
         row = 300 if self.facing == "right" else 200
@@ -35,7 +39,7 @@ def main():
         character = Character()
         sprite = p.load_image("animation_sheet.png")
         ground = p.load_image("TUK_GROUND.png")
-        keys = {p.SDLK_RIGHT: "right", p.SDLK_LEFT: "left"}
+        keys = {p.SDLK_RIGHT: "right", p.SDLK_LEFT: "left", p.SDLK_UP: "up"}
         running = True
         while running:
             for event in p.get_events():
