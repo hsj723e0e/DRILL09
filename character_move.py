@@ -5,6 +5,8 @@ from time import perf_counter
 WIDTH, HEIGHT = 1280, 1024
 FRAME_WIDTH, FRAME_HEIGHT = 100, 100
 MOVE_SPEED = 250.0  # 초당 이동 픽셀 수
+ANIMATION_FPS = 12.0
+FRAME_COUNT = 8
 
 
 class Character:
@@ -15,6 +17,7 @@ class Character:
         self.facing = "right"
         self.moving = False
         self.frame = 0
+        self.animation_time = 0.0
 
     def press(self, key):
         if key not in ("right", "left", "up", "down"):
@@ -38,7 +41,12 @@ class Character:
             self.facing = "right" if dx > 0 else "left"
         self.x += dx * MOVE_SPEED * dt
         self.y += dy * MOVE_SPEED * dt
-        self.frame = (self.frame + 1) % 8 if self.moving else 0
+        if self.moving:
+            self.animation_time += dt
+            self.frame = int(self.animation_time * ANIMATION_FPS) % FRAME_COUNT
+        else:
+            self.animation_time = 0.0
+            self.frame = 0
 
     def draw(self, sprite):
         if self.moving:
