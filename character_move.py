@@ -10,6 +10,7 @@ class Character:
         self.y = HEIGHT / 2
         self.pressed = set()
         self.facing = "right"
+        self.moving = False
 
     def press(self, key):
         if key not in ("right", "left", "up", "down"):
@@ -28,13 +29,17 @@ class Character:
 
     def update(self):
         dx, dy = self.movement()
+        self.moving = bool(dx or dy)
         if dx:
             self.facing = "right" if dx > 0 else "left"
         self.x += dx * 5
         self.y += dy * 5
 
     def draw(self, sprite):
-        row = 300 if self.facing == "right" else 200
+        if self.moving:
+            row = 100 if self.facing == "right" else 0
+        else:
+            row = 300 if self.facing == "right" else 200
         sprite.clip_draw(0, row, FRAME_WIDTH, FRAME_HEIGHT, self.x, self.y)
 
 
