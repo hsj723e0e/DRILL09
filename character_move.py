@@ -1,5 +1,6 @@
 """방향키로 소년 캐릭터를 이동하는 pico2d 프로그램."""
 
+from math import hypot
 from time import perf_counter
 
 WIDTH, HEIGHT = 1280, 1024
@@ -38,6 +39,9 @@ class Character:
         dx, dy = self.movement()
         if dx:
             self.facing = "right" if dx > 0 else "left"
+        length = hypot(dx, dy)
+        if length:
+            dx, dy = dx / length, dy / length
         old_x, old_y = self.x, self.y
         half_width = FRAME_WIDTH / 2
         self.x = max(half_width, min(WIDTH - half_width,
