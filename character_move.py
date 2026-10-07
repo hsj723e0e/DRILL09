@@ -1,6 +1,7 @@
 """방향키로 소년 캐릭터를 이동하는 pico2d 프로그램."""
 
 from math import hypot
+from pathlib import Path
 from time import perf_counter
 
 WIDTH, HEIGHT = 1280, 1024
@@ -8,6 +9,7 @@ FRAME_WIDTH, FRAME_HEIGHT = 100, 100
 MOVE_SPEED = 250.0  # 초당 이동 픽셀 수
 ANIMATION_FPS = 12.0
 FRAME_COUNT = 8
+ASSET_DIR = Path(__file__).resolve().parent
 
 
 class Character:
@@ -71,9 +73,14 @@ def main():
     p.open_canvas(WIDTH, HEIGHT)
     try:
         character = Character()
-        sprite = p.load_image("animation_sheet.png")
-        ground = p.load_image("TUK_GROUND.png")
-        keys = {p.SDLK_RIGHT: "right", p.SDLK_LEFT: "left", p.SDLK_UP: "up", p.SDLK_DOWN: "down"}
+        sprite = p.load_image(str(ASSET_DIR / "animation_sheet.png"))
+        ground = p.load_image(str(ASSET_DIR / "TUK_GROUND.png"))
+        keys = {
+            p.SDLK_RIGHT: "right",
+            p.SDLK_LEFT: "left",
+            p.SDLK_UP: "up",
+            p.SDLK_DOWN: "down",
+        }
         previous_time = perf_counter()
         running = True
         while running:
